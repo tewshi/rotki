@@ -12,6 +12,7 @@ const props = withDefaults(
 
 const emit = defineEmits(['dismiss']);
 
+const css = useCssModule();
 const { t } = useI18n();
 
 const { notification } = toRefs(props);
@@ -60,16 +61,16 @@ const action = async (notification: NotificationData) => {
 <template>
   <v-card
     :class="[
-      $style.notification,
+      css.notification,
       {
-        [$style.action]: !!notification.action,
-        [$style['fixed-height']]: !popup
+        [css.action]: !!notification.action,
+        [css['fixed-height']]: !popup
       }
     ]"
     :outlined="!popup"
     :elevation="0"
   >
-    <v-list-item :class="$style.body" class="flex-column align-stretch">
+    <v-list-item :class="css.body" class="flex-column align-stretch">
       <div class="d-flex pa-1">
         <v-list-item-avatar class="mr-3 ml-1 my-0" :color="color">
           <v-icon size="24px" color="white">
@@ -96,7 +97,7 @@ const action = async (notification: NotificationData) => {
       <div
         class="mt-1 px-2"
         :style="fontStyle"
-        :class="[$style.message, { [$style.inline]: !popup }]"
+        :class="[css.message, { [css.inline]: !popup }]"
       >
         <div>{{ notification.message }}</div>
       </div>
