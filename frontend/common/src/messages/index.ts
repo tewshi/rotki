@@ -1,3 +1,4 @@
+import { type SocketMessageType } from '@/types/websocket-messages';
 import { type SemiPartial } from '../index';
 
 export enum Severity {
@@ -29,6 +30,11 @@ export interface NotificationAction {
   readonly action: () => void;
 }
 
+interface I18nParam {
+  choice: number;
+  props: Record<string, string>;
+}
+
 interface NotificationBase {
   readonly title: string;
   readonly message: string;
@@ -37,6 +43,8 @@ interface NotificationBase {
   readonly action?: NotificationAction;
   readonly group?: NotificationGroup;
   readonly groupCount?: number;
+  readonly i18nParam?: I18nParam;
+  readonly type?: SocketMessageType;
 }
 
 export interface NotificationPayload extends NotificationBase {

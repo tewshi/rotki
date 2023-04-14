@@ -81,6 +81,13 @@ export const NewDetectedToken = z.object({
 
 export type NewDetectedToken = z.infer<typeof NewDetectedToken>;
 
+export const MissingApiKey = z.object({
+  location: z.string(),
+  service: z.string()
+});
+
+export type MissingApiKey = z.infer<typeof MissingApiKey>;
+
 export const SocketMessageType = {
   LEGACY: 'legacy',
   BALANCES_SNAPSHOT_ERROR: 'balance_snapshot_error',
@@ -89,7 +96,8 @@ export const SocketMessageType = {
   DB_UPGRADE_STATUS: 'db_upgrade_status',
   DATA_MIGRATION_STATUS: 'data_migration_status',
   EVM_ACCOUNTS_DETECTION: 'evm_accounts_detection',
-  NEW_EVM_TOKEN_DETECTED: 'new_evm_token_detected'
+  NEW_EVM_TOKEN_DETECTED: 'new_evm_token_detected',
+  MISSING_API_KEY: 'missing_api_key'
 } as const;
 
 export type SocketMessageType =
