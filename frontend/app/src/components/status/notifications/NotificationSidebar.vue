@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import orderBy from 'lodash/orderBy';
-
 defineProps<{ visible: boolean }>();
 
 const { t, tc } = useI18n();
@@ -12,7 +10,7 @@ const { visible: dialogVisible } = storeToRefs(confirmStore);
 const { show } = confirmStore;
 
 const notificationStore = useNotificationsStore();
-const { data } = storeToRefs(notificationStore);
+const { prioritized: notifications } = storeToRefs(notificationStore);
 const { remove } = notificationStore;
 
 const close = () => {
@@ -41,8 +39,6 @@ const showConfirmation = () => {
     clear
   );
 };
-
-const notifications = computed(() => orderBy(data.value, 'date', 'desc'));
 
 const { isMobile } = useTheme();
 const { hasRunningTasks } = storeToRefs(useTaskStore());
