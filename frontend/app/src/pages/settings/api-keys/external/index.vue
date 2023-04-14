@@ -194,7 +194,7 @@ onMounted(async () => {
       </v-tabs-items>
     </api-key-box>
 
-    <api-key-box id="cryptocompare">
+    <api-key-box id="ext-service-key-cryptocompare">
       <service-key
         v-model="cryptocompareKey"
         class="external-services__cryptocompare-key"
@@ -209,7 +209,7 @@ onMounted(async () => {
       />
     </api-key-box>
 
-    <api-key-box id="beaconchain">
+    <api-key-box id="ext-service-key-beaconchain">
       <service-key
         v-model="beaconchainKey"
         class="external-services__beaconchain-key"
@@ -224,7 +224,7 @@ onMounted(async () => {
       />
     </api-key-box>
 
-    <api-key-box id="covalent">
+    <api-key-box id="ext-service-key-covalent">
       <service-key
         v-model="covalentKey"
         class="external-services__covalent-key"
@@ -239,7 +239,7 @@ onMounted(async () => {
       />
     </api-key-box>
 
-    <api-key-box id="loopring">
+    <api-key-box id="ext-service-key-loopring">
       <service-key
         v-model="loopringKey"
         class="external-services__loopring_key"
@@ -273,7 +273,7 @@ onMounted(async () => {
       </v-alert>
     </api-key-box>
 
-    <api-key-box id="opensea">
+    <api-key-box id="ext-service-key-opensea">
       <service-key
         v-model="openseaKey"
         class="external-services__opensea-key"
