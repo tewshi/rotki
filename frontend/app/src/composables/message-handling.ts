@@ -3,10 +3,13 @@ import {
   NotificationGroup,
   Severity
 } from '@rotki/common/lib/messages';
+import { toSentenceCase } from '@/utils/text';
+import { getServiceRegisterUrl } from '@/utils/url';
 import {
   type BalanceSnapshotError,
   type EvmTransactionQueryData,
   MESSAGE_WARNING,
+  type MissingApiKey,
   type NewDetectedToken,
   type PremiumStatusUpdateData,
   SocketMessageType,
@@ -34,7 +37,8 @@ export const useMessageHandling = () => {
   const handleSnapshotError = (data: BalanceSnapshotError): Notification => ({
     title: tc('notification_messages.snapshot_failed.title'),
     message: tc('notification_messages.snapshot_failed.message', 0, data),
-    display: true
+    display: true,
+    type: SocketMessageType.BALANCES_SNAPSHOT_ERROR
   });
 
   const handleEthereumTransactionStatus = (
@@ -50,7 +54,8 @@ export const useMessageHandling = () => {
     title: tc('notification_messages.backend.title'),
     message,
     display: !isWarning,
-    severity: isWarning ? Severity.WARNING : Severity.ERROR
+    severity: isWarning ? Severity.WARNING : Severity.ERROR,
+    type: SocketMessageType.LEGACY
   });
 
   const handlePremiumStatusUpdate = (
@@ -66,7 +71,8 @@ export const useMessageHandling = () => {
         title: tc('notification_messages.premium.active.title'),
         message: tc('notification_messages.premium.active.message'),
         display: true,
-        severity: Severity.INFO
+        severity: Severity.INFO,
+        type: SocketMessageType.PREMIUM_STATUS_UPDATE
       };
     } else if (!active && isPremium) {
       return {
@@ -77,7 +83,8 @@ export const useMessageHandling = () => {
               'notification_messages.premium.inactive.network_problem_message'
             ),
         display: true,
-        severity: Severity.ERROR
+        severity: Severity.ERROR,
+        type: SocketMessageType.PREMIUM_STATUS_UPDATE
       };
     }
 
@@ -105,12 +112,42 @@ export const useMessageHandling = () => {
       }),
       display: true,
       severity: Severity.INFO,
+      type: SocketMessageType.NEW_EVM_TOKEN_DETECTED,
       action: {
         label: tc('notification_messages.new_detected_token.action'),
         action: () => router.push(Routes.ASSET_MANAGER_NEWLY_DETECTED)
       },
       group: NotificationGroup.NEW_DETECTED_TOKENS,
       groupCount: count
+    };
+  };
+
+  const handleMissingApiKeyMessage = (data: MissingApiKey): Notification => {
+    const { service, location } = data;
+    const { external, route } = getServiceRegisterUrl(service, location);
+
+    return {
+      title: tc('notification_messages.missing_api_key.title', 0, {
+        service: toSentenceCase(service),
+        location
+      }),
+      message: 'notification_messages.missing_api_key.message',
+      i18nParam: {
+        choice: 0,
+        props: {
+          service,
+          location,
+          url: external ?? ''
+        }
+      },
+      severity: Severity.WARNING,
+      type: SocketMessageType.MISSING_API_KEY,
+      action: !route
+        ? undefined
+        : {
+            label: tc('notification_messages.missing_api_key.action'),
+            action: () => router.push(route)
+          }
     };
   };
 
@@ -122,7 +159,9 @@ export const useMessageHandling = () => {
 
     const notifications: Notification[] = [];
 
-    if (type === SocketMessageType.BALANCES_SNAPSHOT_ERROR) {
+    if (type === SocketMessageType.MISSING_API_KEY) {
+      notifications.push(handleMissingApiKeyMessage(message.data));
+    } else if (type === SocketMessageType.BALANCES_SNAPSHOT_ERROR) {
       notifications.push(handleSnapshotError(message.data));
     } else if (type === SocketMessageType.LEGACY) {
       const data = message.data;
