@@ -148,6 +148,11 @@ const NewEvmTokenDetectedMessage = z.object({
   data: NewDetectedToken
 });
 
+const MissingApiKeyMessage = z.object({
+  type: z.literal(SocketMessageType.MISSING_API_KEY),
+  data: MissingApiKey
+});
+
 export const WebsocketMessage = UnknownWebsocketMessage.or(
   LegacyWebsocketMessage
 )
@@ -157,6 +162,7 @@ export const WebsocketMessage = UnknownWebsocketMessage.or(
   .or(DbUpgradeStatusMessage)
   .or(DataMigrationStatusMessage)
   .or(MigratedAccountsMessage)
-  .or(NewEvmTokenDetectedMessage);
+  .or(NewEvmTokenDetectedMessage)
+  .or(MissingApiKeyMessage);
 
 export type WebsocketMessage = z.infer<typeof WebsocketMessage>;
