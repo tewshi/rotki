@@ -6,7 +6,9 @@ import {
   Severity
 } from '@rotki/common/lib/messages';
 import { useSessionStorage } from '@vueuse/core';
+import orderBy from 'lodash/orderBy';
 import { type Ref } from 'vue';
+import { SocketMessageType } from '@/types/websocket-messages';
 import { createNotification } from '@/utils/notifications';
 
 const notificationDefaults = (): NotificationPayload => ({
@@ -24,6 +26,17 @@ export const useNotificationsStore = defineStore('notifications', () => {
     {}
   );
 
+  const prioritized = computed<NotificationData[]>(() => {
+    const byDate = orderBy(get(data), n => n.date, 'desc');
+    return orderBy(
+      byDate,
+      [
+        (n: NotificationData) => !n.action,
+        (n: NotificationData) => n.type === SocketMessageType.LEGACY
+      ],
+      ['asc', 'desc']
+    );
+  });
   const count = computed(() => get(data).length);
   const nextId = computed(() => {
     const ids = get(data)
@@ -39,7 +52,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
     return nextId;
   });
   const queue = computed(() =>
-    get(data).filter(notification => notification.display)
+    get(prioritized).filter(notification => notification.display)
   );
 
   function update(payload: NotificationData[]): void {
@@ -142,6 +155,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
     count,
     nextId,
     queue,
+    prioritized,
     notify,
     displayed,
     remove
