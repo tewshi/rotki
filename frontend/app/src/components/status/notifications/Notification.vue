@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { type NotificationData, Severity } from '@rotki/common/lib/messages';
 import dayjs from 'dayjs';
+import { SocketMessageType } from '@/types/websocket-messages';
 
 const props = withDefaults(
   defineProps<{
@@ -44,6 +45,10 @@ const color = computed(() => {
 });
 
 const date = computed(() => dayjs(get(notification).date).format('LLL'));
+
+const isMissingKeyNotification = computed(
+  () => get(notification).type === SocketMessageType.MISSING_API_KEY
+);
 
 const copy = async () => {
   await navigator.clipboard.writeText(get(notification).message);
@@ -99,7 +104,31 @@ const action = async (notification: NotificationData) => {
         :style="fontStyle"
         :class="[css.message, { [css.inline]: !popup }]"
       >
-        <div>{{ notification.message }}</div>
+        <template v-if="isMissingKeyNotification">
+          <i18n
+            v-if="notification.i18nParam"
+            :path="notification.message"
+            :plural="notification.i18nParam.choice"
+            tag="div"
+          >
+            <template #service>
+              <span class="text-capitalize">{{
+                notification.i18nParam.props.service
+              }}</span>
+            </template>
+            <template #location>
+              {{ notification.i18nParam.props.location }}
+            </template>
+            <template #url>
+              <a :href="notification.i18nParam.props.url" target="_blank">{{
+                notification.i18nParam.props.url
+              }}</a>
+            </template>
+          </i18n>
+        </template>
+        <div v-else>
+          {{ notification.message }}
+        </div>
       </div>
       <slot />
       <div class="d-flex mt-auto align-center ml-n1">
