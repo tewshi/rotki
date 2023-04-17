@@ -487,7 +487,7 @@ const fetchDataAndRefreshEvents = async (
         </v-row>
       </template>
 
-      <collection-handler :collection="events" @set-page="setPage">
+      <collection-handler :collection="events" @set-page="setPage($event)">
         <template
           #default="{
             data: eventsData,
