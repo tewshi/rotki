@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/prefer-modern-dom-apis */
 import Vue from 'vue';
-import { assert } from '@/utils/assertions';
+// import { assert } from '@/utils/assertions';
 
 const freeze = (object: any, property: any, value: any) => {
   Object.defineProperty(object, property, {

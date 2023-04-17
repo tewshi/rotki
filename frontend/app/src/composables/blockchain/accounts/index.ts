@@ -7,9 +7,6 @@ import {
 } from '@/types/blockchain/chains';
 import { type BlockchainMetadata } from '@/types/task';
 import { TaskType } from '@/types/task-type';
-import { assert } from '@/utils/assertions';
-import { logger } from '@/utils/logging';
-import { startPromise } from '@/utils';
 import {
   type AccountPayload,
   type BasicBlockchainAccountPayload,

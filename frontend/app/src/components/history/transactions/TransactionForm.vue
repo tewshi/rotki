@@ -9,7 +9,6 @@ import {
   type EvmChainAndTxHash
 } from '@/types/history/tx';
 import { type Writeable } from '@/types';
-import { assert } from '@/utils/assertions';
 
 withDefaults(
   defineProps<{

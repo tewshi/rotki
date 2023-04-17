@@ -9,7 +9,6 @@ import { type Properties } from '@/types';
 import { chainSection } from '@/types/blockchain';
 import { Section } from '@/types/status';
 import { TaskType } from '@/types/task-type';
-import { assert } from '@/utils/assertions';
 import { Zero, zeroBalance } from '@/utils/bignumbers';
 import { isTokenChain } from '@/types/blockchain/chains';
 import { balanceSum, bigNumberSum } from '@/utils/calculation';

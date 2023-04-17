@@ -10,9 +10,6 @@ import { type Task, tasklist } from 'tasklist';
 import { BackendCode } from '@/electron-main/backend-code';
 import { type BackendOptions } from '@/electron-main/ipc';
 import { DEFAULT_PORT, selectPort } from '@/electron-main/port-utils';
-import { assert } from '@/utils/assertions';
-import { wait } from '@/utils/backoff';
-import { checkIfDevelopment } from '@/utils/env-utils';
 import type stream from 'node:stream';
 
 const isDevelopment = checkIfDevelopment();

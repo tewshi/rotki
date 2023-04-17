@@ -6,7 +6,6 @@ import {
 } from '@/electron-main/ipc';
 import { type WebVersion } from '@/types';
 import { getBackendUrl } from '@/utils/account-management';
-import { assert } from '@/utils/assertions';
 
 const BASEURL = 'https://rotki.com/';
 const BASE_DOCS_URL = 'https://rotki.readthedocs.io';

@@ -3,8 +3,6 @@ import { type AssetBalanceWithPrice, type BigNumber } from '@rotki/common';
 import { Routes } from '@/router/routes';
 import { SupportedExchange } from '@/types/exchanges';
 import { TaskType } from '@/types/task-type';
-import { Zero } from '@/utils/bignumbers';
-import { uniqueStrings } from '@/utils/data';
 import { type Nullable } from '@/types';
 import { useExchangesStore } from '@/store/exchanges';
 

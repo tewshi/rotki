@@ -3,8 +3,6 @@ import { type BrowserWindow, Menu, Tray, app } from 'electron';
 import { settingsManager } from '@/electron-main/app-settings';
 import { type TrayUpdate } from '@/electron-main/ipc';
 import { type Nullable } from '@/types';
-import { assert } from '@/utils/assertions';
-import { checkIfDevelopment } from '@/utils/env-utils';
 
 type WindowProvider = () => BrowserWindow;
 const isMac = process.platform === 'darwin';

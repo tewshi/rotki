@@ -7,8 +7,6 @@ import { type Module } from '@/types/modules';
 import { type NonFungibleBalance } from '@/types/nfbalances';
 import { type ManualPriceFormPayload } from '@/types/prices';
 import { Section } from '@/types/status';
-import { assert } from '@/utils/assertions';
-import { uniqueStrings } from '@/utils/data';
 
 defineProps({
   modules: {

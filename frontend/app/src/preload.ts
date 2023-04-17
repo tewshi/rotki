@@ -32,7 +32,6 @@ import {
   IPC_TRAY_UPDATE,
   IPC_VERSION
 } from '@/electron-main/ipc-commands';
-import { checkIfDevelopment } from '@/utils/env-utils';
 
 function ipcAction<T>(message: string, arg?: any): Promise<T> {
   return new Promise(resolve => {
