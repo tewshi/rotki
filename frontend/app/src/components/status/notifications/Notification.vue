@@ -51,6 +51,16 @@ const isMissingKeyNotification = computed(
 );
 
 const copy = async () => {
+  if (get(isMissingKeyNotification)) {
+    const { message, i18nParam } = get(notification);
+    return await navigator.clipboard.writeText(
+      t(message, {
+        service: i18nParam?.props.service,
+        location: i18nParam?.props.location,
+        url: i18nParam?.props.url
+      }).toString()
+    );
+  }
   await navigator.clipboard.writeText(get(notification).message);
 };
 
