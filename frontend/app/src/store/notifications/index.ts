@@ -3,12 +3,12 @@ import {
   NotificationCategory,
   type NotificationData,
   type NotificationPayload,
+  Priority,
   Severity
 } from '@rotki/common/lib/messages';
 import { useSessionStorage } from '@vueuse/core';
 import orderBy from 'lodash/orderBy';
 import { type Ref } from 'vue';
-import { SocketMessageType } from '@/types/websocket-messages';
 import { createNotification } from '@/utils/notifications';
 
 const notificationDefaults = (): NotificationPayload => ({
@@ -30,11 +30,8 @@ export const useNotificationsStore = defineStore('notifications', () => {
     const byDate = orderBy(get(data), n => n.date, 'desc');
     return orderBy(
       byDate,
-      [
-        (n: NotificationData) => !n.action,
-        (n: NotificationData) => n.type === SocketMessageType.LEGACY
-      ],
-      ['asc', 'desc']
+      (n: NotificationData) => n.priority ?? Priority.NORMAL,
+      'desc'
     );
   });
   const count = computed(() => get(data).length);

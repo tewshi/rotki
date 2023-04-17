@@ -6,6 +6,13 @@ export enum Severity {
   INFO = 'info'
 }
 
+export enum Priority {
+  BULK,
+  NORMAL,
+  HIGH,
+  ACTION
+}
+
 export enum NotificationGroup {
   NEW_DETECTED_TOKENS = 'NEW_DETECTED_TOKENS'
 }
@@ -29,7 +36,8 @@ export interface NotificationAction {
   readonly action: () => void;
 }
 
-interface I18nParam {
+export interface I18nParam {
+  message: string;
   choice: number;
   props: Record<string, string>;
 }
@@ -43,7 +51,7 @@ interface NotificationBase {
   readonly group?: NotificationGroup;
   readonly groupCount?: number;
   readonly i18nParam?: I18nParam;
-  readonly type?: string;
+  readonly priority?: Priority;
 }
 
 export interface NotificationPayload extends NotificationBase {

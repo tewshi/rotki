@@ -1,6 +1,7 @@
 import {
   type Notification,
   NotificationGroup,
+  Priority,
   Severity
 } from '@rotki/common/lib/messages';
 import { toSentenceCase } from '@/utils/text';
@@ -37,8 +38,7 @@ export const useMessageHandling = () => {
   const handleSnapshotError = (data: BalanceSnapshotError): Notification => ({
     title: tc('notification_messages.snapshot_failed.title'),
     message: tc('notification_messages.snapshot_failed.message', 0, data),
-    display: true,
-    type: SocketMessageType.BALANCES_SNAPSHOT_ERROR
+    display: true
   });
 
   const handleEthereumTransactionStatus = (
@@ -55,7 +55,7 @@ export const useMessageHandling = () => {
     message,
     display: !isWarning,
     severity: isWarning ? Severity.WARNING : Severity.ERROR,
-    type: SocketMessageType.LEGACY
+    priority: Priority.BULK
   });
 
   const handlePremiumStatusUpdate = (
@@ -71,8 +71,7 @@ export const useMessageHandling = () => {
         title: tc('notification_messages.premium.active.title'),
         message: tc('notification_messages.premium.active.message'),
         display: true,
-        severity: Severity.INFO,
-        type: SocketMessageType.PREMIUM_STATUS_UPDATE
+        severity: Severity.INFO
       };
     } else if (!active && isPremium) {
       return {
@@ -83,8 +82,7 @@ export const useMessageHandling = () => {
               'notification_messages.premium.inactive.network_problem_message'
             ),
         display: true,
-        severity: Severity.ERROR,
-        type: SocketMessageType.PREMIUM_STATUS_UPDATE
+        severity: Severity.ERROR
       };
     }
 
@@ -112,7 +110,7 @@ export const useMessageHandling = () => {
       }),
       display: true,
       severity: Severity.INFO,
-      type: SocketMessageType.NEW_EVM_TOKEN_DETECTED,
+      priority: Priority.ACTION,
       action: {
         label: tc('notification_messages.new_detected_token.action'),
         action: () => router.push(Routes.ASSET_MANAGER_NEWLY_DETECTED)
@@ -129,19 +127,20 @@ export const useMessageHandling = () => {
     return {
       title: tc('notification_messages.missing_api_key.title', 0, {
         service: toSentenceCase(service),
-        location
+        location: toSentenceCase(location)
       }),
-      message: 'notification_messages.missing_api_key.message',
+      message: '',
       i18nParam: {
+        message: 'notification_messages.missing_api_key.message',
         choice: 0,
         props: {
-          service,
-          location,
+          service: toSentenceCase(service),
+          location: toSentenceCase(location),
           url: external ?? ''
         }
       },
       severity: Severity.WARNING,
-      type: SocketMessageType.MISSING_API_KEY,
+      priority: Priority.ACTION,
       action: !route
         ? undefined
         : {
