@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { type NotificationData, Severity } from '@rotki/common/lib/messages';
+import {
+  type NotificationData,
+  Priority,
+  Severity
+} from '@rotki/common/lib/messages';
 import dayjs from 'dayjs';
-import { SocketMessageType } from '@/types/websocket-messages';
 
 const props = withDefaults(
   defineProps<{
@@ -15,6 +18,7 @@ const emit = defineEmits(['dismiss']);
 
 const css = useCssModule();
 const { t } = useI18n();
+const { copy: copyToClipboard } = useClipboard();
 
 const { notification } = toRefs(props);
 const dismiss = (id: number) => {
@@ -47,13 +51,15 @@ const color = computed(() => {
 const date = computed(() => dayjs(get(notification).date).format('LLL'));
 
 const isMissingKeyNotification = computed(
-  () => get(notification).type === SocketMessageType.MISSING_API_KEY
+  () =>
+    get(notification).priority === Priority.ACTION &&
+    !!get(notification).i18nParam
 );
 
 const copy = async () => {
   if (get(isMissingKeyNotification)) {
     const { message, i18nParam } = get(notification);
-    return await navigator.clipboard.writeText(
+    return await copyToClipboard(
       t(message, {
         service: i18nParam?.props.service,
         location: i18nParam?.props.location,
@@ -61,7 +67,7 @@ const copy = async () => {
       }).toString()
     );
   }
-  await navigator.clipboard.writeText(get(notification).message);
+  await copyToClipboard(get(notification).message);
 };
 
 const { fontStyle } = useTheme();
@@ -115,26 +121,10 @@ const action = async (notification: NotificationData) => {
         :class="[css.message, { [css.inline]: !popup }]"
       >
         <template v-if="isMissingKeyNotification">
-          <i18n
+          <missing-key-notification
             v-if="notification.i18nParam"
-            :path="notification.message"
-            :plural="notification.i18nParam.choice"
-            tag="div"
-          >
-            <template #service>
-              <span class="text-capitalize">{{
-                notification.i18nParam.props.service
-              }}</span>
-            </template>
-            <template #location>
-              {{ notification.i18nParam.props.location }}
-            </template>
-            <template #url>
-              <a :href="notification.i18nParam.props.url" target="_blank">{{
-                notification.i18nParam.props.url
-              }}</a>
-            </template>
-          </i18n>
+            :params="notification.i18nParam"
+          />
         </template>
         <div v-else>
           {{ notification.message }}
